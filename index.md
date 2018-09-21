@@ -9,4 +9,4 @@
 
 ### Check out my blerrrrrrrg
 
-[Machine Learning Glossary and Resources!](posts/2018-09-20-Machine-Learning-Glossary-and-Resources.md)
+[Machine Learning Glossary and Resources!](_posts/2018-09-20-Machine-Learning-Glossary-and-Resources.md)
