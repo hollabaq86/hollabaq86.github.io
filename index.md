@@ -8,3 +8,5 @@
 	Twitter bot using NodeJS with modules for Twitter's REST API and emoji text.
 
 ### Check out my blerrrrrrrg
+
+[Machine Learning Glossary and Resources!](posts/2018-09-20-Machine-Learning-Glossary-and-Resources.md)
