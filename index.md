@@ -1,7 +1,9 @@
 ## Hey, you found me!
 
-### Check out the things I've worked on
+### Check out my current and former projects
 
+- [Boozin' Bitchin' Book Club](http://www.b3cpod.com)
+	A bi-weekly book club podcast where I drink and discuss with my cohosts. Hijinks ensue.	
 - [Haikuna Matata](https://haikuna-matata.herokuapp.com)
 	A Python-based, haiku generating web applcation that leverages the Python community's NLTK library and machine-learning principles.
 - [Wham Bot](https://twitter.com/12daysofwham)
