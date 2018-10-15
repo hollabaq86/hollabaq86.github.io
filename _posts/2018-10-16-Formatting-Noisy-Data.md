@@ -32,7 +32,33 @@ Tools I used- [csvkit](https://csvkit.readthedocs.io/en/1.0.3/#), [tail](http://
 
 ### csvkit
 
-csvkit is a set of command line tools (written in python!) that help you work with CSVs. Since I use this set of tools at work regularly, I felt comfortable using `csvcut` to extract specific columns from my source data
+csvkit is a set of command line tools (written in python!) that help you work with CSVs. Since I use this set of tools at work regularly, I felt comfortable using `csvcut` to extract specific columns from my source data. Once I had all the tables of possible dishes from my internet resource source saved to CSV files, I used the command:
+
+```
+$ csvcut -n FILE
+```
+
+To quickly examine columns and see how much work would be needed to condense all files into one large resource.
+
+_Example output_
+
+![a list of columns generated from a csvcut command](../img/source3.png)
+
+Then, once I had established a list of columns I would need to add or remove from each source table, I could use `csvcut` again to select either a specific column(s) or extract all but a few column(s) as my output:
+
+```
+$ csvcut -c 5 dishes_defense.csv > just_notes.csv 
+// this gives me just the notes column from the CSV
+
+$ csvcut -C 5 dishes_defense.csv > trimmed_defense.csv
+// this gives me all columns except the notes columne
+```
+
+Once I had all the columns/fields in my source CSV files in the same order, I could use the tail command to dump all contents of my CSVs starting at a specific row (like row 2, so that I'm not copying headers) into a condensed file:
+
+```
+$ tail -n +2 dishes_defense.csv > all_dishes.csv
+```
 
 ## Scripting for specific use cases
 
