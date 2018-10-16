@@ -12,3 +12,5 @@
 ### Check out my blerrrrrrrg
 
 [Machine Learning Glossary and Resources!](_posts/2018-09-20-Machine-Learning-Glossary-and-Resources.md)
+
+[Formatting Noisy Data for Machine Learning](_posts/2018-10-16-Formatting-Noisy-Data-for-Machine-Learning.md)
