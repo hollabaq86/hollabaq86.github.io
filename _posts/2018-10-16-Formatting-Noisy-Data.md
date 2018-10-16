@@ -78,7 +78,7 @@ Mighty Crab Risotto
 Mighty Porgy Meunière
 ```
 
-1. The source data also indicates whether an ingredient can be used in a recipe more than once (For reference, you can submit up to five ingredients to create a recipe in _Zelda: Breath of the Wild_), but it's written in a format that's great for humans, but not so great for a machine:
+2. The source data also indicates whether an ingredient can be used in a recipe more than once (For reference, you can submit up to five ingredients to create a recipe in _Zelda: Breath of the Wild_). It's currently in a format that's great for humans, but not so great for a machine:
 
 ```
 Recipe Name, Ingredients
@@ -90,6 +90,8 @@ Mighty Porgy Meunière,"Tabantha Wheat,Goat Butter,Mighty Porgy x3"
 I _could_ use the pandas library to hot encode _some_ of this information (more on this further down in my post), but it might be more practical to just write a script that does this for me.
 
 ### Using `csv`
+
+
 Python's [CSV library](https://docs.python.org/3/library/csv.html) has some great features that make it easy to work with complex data structures. For example, using `DictReader` and `DictWriter` you can treat CSV rows as if they are dictionaries, making it more legible to extract data from specific columns (provided your source data and an output file have headers):
 
 ```
@@ -119,10 +121,36 @@ with open('output.csv', 'w') as csvfile:
 
 ### Extracting Recipe Names
 
+I can write a simple method to split a recipe's name on any whitespace character, which will give me a list of separated words:
 
-using python csv:
-	manually creating ingredient counts based on existing columns from the source
-	manually hot encoding recipe and health effects 
+```
+```
+
+Once I have this, I can take the firt word in this list and add it to a constant of all possible first words in recipe names to be used later when I write my data to an output CSV:
+
+```
+```
+
+Once I've done this for every recipe in my input file, I can write some conditional logic that hot encodes the first word of each recipe's name so that my output has a column for every possible first word and whether it applies to that recipe (`0` indicating no, `1` indicating yes):
+
+```
+```
+
+### Counting Ingredients
+
+Similar to recipe names, I can split each string of possible ingredients into a list, and then apply some if/else logic to check if each entry in my ingredients list contains `x` and a number, indicating multiple ingredients. 
+
+```
+```
+
+I'll then add a column for every possible ingredient to my output CSV and update each recipe's row with the number of each ingredient supplied (marking `0` if that ingredient was not used)
+
+```
+```
+
+This may take more lines of code to achieve than with some intricate pandas knowledge, but my work is legible and I can quickly check and see if there are any outliers that don't match expected values for my columns.
+
+Now that I have an output CSV with some more uniform formatting, I'm ready to import this data to a DataFrame using pandas.
 
 ## Hot Encoding
 
