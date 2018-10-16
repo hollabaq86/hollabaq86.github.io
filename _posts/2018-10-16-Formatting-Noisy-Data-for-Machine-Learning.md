@@ -2,7 +2,7 @@
 author: xoxo Holla
 ---
 
-_Formatting Noisy Data_
+_Formatting Noisy Data for Machine Learning_
 
 # Overview
 
