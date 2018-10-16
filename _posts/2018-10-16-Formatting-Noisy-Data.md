@@ -115,37 +115,79 @@ with open('output.csv', 'w') as csvfile:
     WRITER = csv.DictWriter(csvfile, fieldnames=HEADERS)
     WRITER.writeheader()
     for formatted_recipe in write_to_output: 
-        WRITER.writerow(formatted_recipe) 
+        WRITER.writerow(formatted_row) 
 
 ```
 
 ### Extracting Recipe Names
 
-I can write a simple method to split a recipe's name on any whitespace character, which will give me a list of separated words:
+I can write a simple method to split a recipe's name on any whitespace character, which will give me a list of separated words. I only want the first word in my recipe name to work with so I can whittle down my method even more:
 
 ```
+def get_recipe_effect(recipe_name):
+    return recipe_name.split(' ')[0]
 ```
 
 Once I have this, I can take the firt word in this list and add it to a constant of all possible first words in recipe names to be used later when I write my data to an output CSV:
 
 ```
+RECIPE_EFFECTS = {} # my constant that I'll use later when I hot encode
+name_effect = get_recipe_effect(name)
+if 'name_' + name_effect in RECIPE_EFFECTS: # `name_` prefix for output readability
+    RECIPE_EFFECTS['name_' + name_effect] += 1
+else:
+    RECIPE_EFFECTS['name_' + name_effect] = 1     
 ```
 
 Once I've done this for every recipe in my input file, I can write some conditional logic that hot encodes the first word of each recipe's name so that my output has a column for every possible first word and whether it applies to that recipe (`0` indicating no, `1` indicating yes):
 
+
 ```
+for key in RECIPE_EFFECTS: 
+    if recipe['Recipe First Word'] in key: # if the first word of the recipe I'm about to write add to my output file is the same as my key
+        formatted_row[recipe['Recipe First Word']] = 1
+    else:
+        formatted_row[recipe['Recipe First Word']] = 0 
 ```
 
 ### Counting Ingredients
 
-Similar to recipe names, I can split each string of possible ingredients into a list, and then apply some if/else logic to check if each entry in my ingredients list contains `x` and a number, indicating multiple ingredients. 
+Similar to recipe names, I can write a method that splits each string of possible ingredients into a list, and then applies some if/else logic to check if each entry in my ingredients list contains `x` and a number, indicating multiple ingredients. 
 
 ```
+def ingredients_prep(ingredients_list):
+    row_ingredients = {}
+    split_up = ingredients_list.split(',')
+    for item in split_up:
+        if " x" in item:
+            working = item.split(' x')
+            ingredient_key = working[0]
+            multiplier = int(working[-1].strip()[-1])
+            row_ingredients['ing_' + ingredient_key] = multiplier
+        else:
+            row_ingredients['ing_' + item] = 1
+    return row_ingredients
 ```
 
 I'll then add a column for every possible ingredient to my output CSV and update each recipe's row with the number of each ingredient supplied (marking `0` if that ingredient was not used)
 
 ```
+INGREDIENTS = {}
+prepped_ingredients = ingredients_prep(row['Ingredients'])
+for key in prepped_ingredients:
+    if key not in INGREDIENTS:
+        INGREDIENTS[key] = 1
+    else:
+        INGREDIENTS[key] += 1
+
+# later, writing to my output CSV
+# recipe['Ingredients'] is a dictionary of ingredients in a single recipe, 
+# and the count of those ingredients used
+for key in INGREDIENTS:
+    if key in recipe['Ingredients']:  
+        formatted_row[key] = recipe['Ingredients'][key]
+    else:
+        formatted_row[key] = 0
 ```
 
 This may take more lines of code to achieve than with some intricate pandas knowledge, but my work is legible and I can quickly check and see if there are any outliers that don't match expected values for my columns.
