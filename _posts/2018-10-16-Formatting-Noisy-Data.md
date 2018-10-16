@@ -228,5 +228,26 @@ That said, for future projects I can see this being a handy method to quickly ho
 
 ## Scaling
 
-using pandas to scale duration, sell price, and health effect details
-dropping and concating your work
+Once I had my finished output CSV, there were a few more columns that had data could be mis-interpreted by my ML algorithm if I left as-is. Instead, I scaled the data in these columns so that all data was on a scale of 0.00 to 1.00:
+
+```
+import pandas
+
+
+TEST = pandas.read_csv('output.csv', delimiter=',')
+TO_SCALE = TEST[['Duration', 'Sell Price', 'Health Effect Details']]
+TO_SCALE -= TO_SCALE.min()
+TO_SCALE /= TO_SCALE.max()
+
+# drop my original columns add my newly scaled columns to my DataFrame FINAL
+TEST = TEST.drop(['Duration', 'Sell Price', 'Health Effect Details'], axis=1)
+FINAL = pandas.concat([TEST, TO_SCALE], axis=1)
+```
+
+My scaled columns would look something like:
+
+![scaled columns showing data in a range of 0 to 1](../img/source5.png)
+
+And that's it! I can separate this data into a training and testing set.
+
+![a gif from zelda daying don't give up](../img/dont_give_up.gif)
