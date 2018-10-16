@@ -18,11 +18,11 @@ My source information does have several tables of recipes to use! That said, not
 
 _Example 1- this table looks like it'd be easy to convert_
 
-![Source table showing ok data](../img/source1.png)
+![Source table showing ok data]({{ site.url }}{{ site.baseurl }}/img/source1.png)
 
 _Example 2- this table has information that is contextual and may need some work_
 
-![Source table showing nuanced notes](../img/source2.png)
+![Source table showing nuanced notes](img/source2.png)
 
 To achieve this, we can use some old school command line tricks, a little script work, as well as hot encoding and scaling techniques so that my training and test data is in a format that's easier for my ML project to read.
 
@@ -43,7 +43,7 @@ To quickly examine columns and see how much work would be needed to condense all
 
 _Example output_
 
-![a list of columns generated from a csvcut command](../img/source3.png)
+![a list of columns generated from a csvcut command](img/source3.png)
 
 Then, once I had established a list of columns I would need to add or remove from each source table, I could use `csvcut` again to select either a specific column(s) or extract all but a few column(s) as my output:
 
@@ -219,7 +219,7 @@ print(hot_ingredients.columns)
 
 _results_
 
-![list of columns with weird ingredient names](../img/source4.png)
+![list of columns with weird ingredient names](img/source4.png)
 
 Given my low-level knowledge of `get_dummies`, and the intricacy of the work I would need to perform for each item in a string, I decided it'd be better for me to use some old-fashioned script work instead.
 
@@ -246,8 +246,8 @@ FINAL = pandas.concat([TEST, TO_SCALE], axis=1)
 
 My scaled columns would look something like:
 
-![scaled columns showing data in a range of 0 to 1](../img/source5.png)
+![scaled columns showing data in a range of 0 to 1](img/source5.png)
 
 And that's it! I can separate this data into a training and testing set.
 
-![a gif from zelda daying don't give up](../img/dont_give_up.gif)
+![a gif from zelda daying don't give up](img/dont_give_up.gif)
