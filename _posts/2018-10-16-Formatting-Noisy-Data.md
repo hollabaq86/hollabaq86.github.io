@@ -196,8 +196,35 @@ Now that I have an output CSV with some more uniform formatting, I'm ready to im
 
 ## Hot Encoding
 
-Using pandas to hot encode a list of items to separate columns/fields
-	- why didn't I use this technique for some items I manually hot encoded in my script file?
+I had mentioned earlier that I could use [pandas](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.get_dummies.html) to hot encode some classifying information. When I was first working on formatting my data, I had explored using the `getdummies` method to achieve this, but then on inspecting those results I realized I would have a bunch of columns that look the same except for the number of ingredients in the feature name:
+
+```
+import pandas
+
+def separate_ingredients(list):
+	for ingredient_list in ingredients:
+		if type(ingredient_list) == str:
+			separated_ingredients.extend(_prep_columns(ingredient_list))
+	return separated_ingredients		
+
+def _prep_columns(list):
+	columns = list.split(',')
+	return columns
+
+TEST = pandas.read_csv('raw_data.csv', delimiter=',')
+
+hot_ingredients = pandas.get_dummies(TEST['Ingredients'], prefix='ing')
+print(hot_ingredients.columns)
+```
+
+_results_
+
+![list of columns with weird ingredient names](../img/source4.png)
+
+Given my low-level knowledge of `get_dummies`, and the intricacy of the work I would need to perform for each item in a string, I decided it'd be better for me to use some old-fashioned script work instead.
+
+That said, for future projects I can see this being a handy method to quickly hot encode your data!
+
 
 ## Scaling
 
