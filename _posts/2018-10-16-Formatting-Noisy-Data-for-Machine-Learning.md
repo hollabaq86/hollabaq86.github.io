@@ -196,6 +196,31 @@ Now that I have an output CSV with some more uniform formatting, I'm ready to im
 
 ## One Hot Encoding
 
+First, what is one hot encoding? Rakshith Vasudev has a great [explainer](https://hackernoon.com/what-is-one-hot-encoding-why-and-when-do-you-have-to-use-it-e3c6186d008f) on this process where he states:
+
+
+```
+One hot encoding is a process by which categorical variables are converted into a form that could be provided to ML algorithms to do a better job in prediction.
+```
+
+Essentially, if you have one column where the values are categorical- like 
+
+```
+color
+'blue'
+'red'
+'green'
+```
+
+One hot encoding will translate this information so a ML algorithm can interpret it more easily. With my previous example, your result would be after on hot encoding:
+
+```
+color_blue, color_red, color_green
+1,0,0
+0,1,0
+0,0,1
+``` 
+
 I had mentioned earlier that I could use [pandas](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.get_dummies.html) to hot encode some classifying information. When I was first working on formatting my data, I had explored using the `getdummies` method to achieve this, but then on inspecting those results I realized I would have a bunch of columns that look the same except for the number of ingredients in the feature name:
 
 ```
@@ -248,6 +273,6 @@ My scaled columns would look something like:
 
 ![scaled columns showing data in a range of 0 to 1]({{ site.url }}{{ site.baseurl }}/img/source5.png)
 
-And that's it! I can separate this data into a training and testing set.
+And that's it! OR IS IT? I _can_ separate this data into a training and testing set. There's also some functionality in pandas that I could use to put together my source data so I don't have to lean on bash commands. I _could_ also refactor some of my if/else logic so that I'm completing it in one line. That said, condensing those statements into one line can make my code less readable to someone else (or me two weeks from now!). 
 
 ![a gif from zelda saying don't give up]({{ site.url }}{{ site.baseurl }}/img/dont_give_up.gif)
