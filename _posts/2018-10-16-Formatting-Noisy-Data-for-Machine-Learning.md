@@ -236,9 +236,9 @@ def _prep_columns(list):
 	columns = list.split(',')
 	return columns
 
-TEST = pandas.read_csv('raw_data.csv', delimiter=',')
+test = pandas.read_csv('raw_data.csv', delimiter=',')
 
-hot_ingredients = pandas.get_dummies(TEST['Ingredients'], prefix='ing')
+hot_ingredients = pandas.get_dummies(test['Ingredients'], prefix='ing')
 print(hot_ingredients.columns)
 ```
 
