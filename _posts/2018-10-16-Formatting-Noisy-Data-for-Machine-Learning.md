@@ -9,8 +9,8 @@ _Formatting Noisy Data for Machine Learning_
 A key factor in the success of any machine learning(ML) project includes formatting your data so that the algorithm you choose has "good" data to work with. What do I mean?
 
 - The data is accurate,
-- Features that are quantitative are scaled if needed,
-- Features that are qualitative are classified if needed.
+- Features that are quantitative are scaled (if needed),
+- Features that are qualitative are classified.
 
 For my current project, I'm trying to identify the selling price of recipes you can create in the Nintendo game _Zelda: Breath of the Wild_. Unfortunately there isn't a publicly available database of all ingredients and possible recipes, so I did some googling to see what online resources had data that could be scraped the most easily.
 
@@ -24,7 +24,7 @@ _Example 2- this table has information that is contextual and may need some work
 
 ![Source table showing nuanced notes]({{ site.url }}{{ site.baseurl }}/img/source2.png)
 
-To achieve this, we can use some old school command line tricks, a little script work, as well as hot encoding and scaling techniques so that my training and test data is in a format that's easier for my ML project to read.
+To achieve this, we can use some old school command line tricks, a little script work, as well as one hot encoding and scaling techniques so that my training and test data is in a format that's easier for my ML project to read.
 
 
 ## Command line tips
@@ -52,7 +52,7 @@ $ csvcut -c 5 dishes_defense.csv > just_notes.csv
 // this gives me just the notes column from the CSV
 
 $ csvcut -C 5 dishes_defense.csv > trimmed_defense.csv
-// this gives me all columns except the notes columne
+// this gives me all columns except the notes column
 ```
 
 Once I had all the columns/fields in my source CSV files in the same order, I could use the tail command to dump all contents of my CSVs starting at a specific row (like row 2, so that I'm not copying headers) into a condensed file:
@@ -112,10 +112,10 @@ for recipe in recipes:
 	write_to_output[recipe['Recipe Name']] = formatted_row 
 
 with open('output.csv', 'w') as csvfile:
-    WRITER = csv.DictWriter(csvfile, fieldnames=HEADERS)
-    WRITER.writeheader()
+    writer = csv.DictWriter(csvfile, fieldnames=HEADERS)
+    writer.writeheader()
     for formatted_recipe in write_to_output: 
-        WRITER.writerow(formatted_row) 
+        writer.writerow(formatted_row) 
 
 ```
 
@@ -128,22 +128,22 @@ def get_recipe_effect(recipe_name):
     return recipe_name.split(' ')[0]
 ```
 
-Once I have this, I can take the firt word in this list and add it to a constant of all possible first words in recipe names to be used later when I write my data to an output CSV:
+Once I have this, I can take the first word in this list and add it to a dictionary of all possible first words in recipe names to be used later when I write my data to an output CSV:
 
 ```
-RECIPE_EFFECTS = {} # my constant that I'll use later when I hot encode
+recipe_effects = {} # my dictionary that I'll use later when I hot encode
 name_effect = get_recipe_effect(name)
-if 'name_' + name_effect in RECIPE_EFFECTS: # `name_` prefix for output readability
-    RECIPE_EFFECTS['name_' + name_effect] += 1
+if 'name_' + name_effect in recipe_effects: # `name_` prefix for output readability
+    recipe_effects['name_' + name_effect] += 1
 else:
-    RECIPE_EFFECTS['name_' + name_effect] = 1     
+    recipe_effects['name_' + name_effect] = 1     
 ```
 
 Once I've done this for every recipe in my input file, I can write some conditional logic that hot encodes the first word of each recipe's name so that my output has a column for every possible first word and whether it applies to that recipe (`0` indicating no, `1` indicating yes):
 
 
 ```
-for key in RECIPE_EFFECTS: 
+for key in recipe_effects: 
     if recipe['Recipe First Word'] in key: # if the first word of the recipe I'm about to write add to my output file is the same as my key
         formatted_row[recipe['Recipe First Word']] = 1
     else:
@@ -172,18 +172,18 @@ def ingredients_prep(ingredients_list):
 I'll then add a column for every possible ingredient to my output CSV and update each recipe's row with the number of each ingredient supplied (marking `0` if that ingredient was not used)
 
 ```
-INGREDIENTS = {}
+all_ingredients = {}
 prepped_ingredients = ingredients_prep(row['Ingredients'])
 for key in prepped_ingredients:
-    if key not in INGREDIENTS:
-        INGREDIENTS[key] = 1
+    if key not in all_ingredients:
+        all_ingredients[key] = 1
     else:
-        INGREDIENTS[key] += 1
+        all_ingredients[key] += 1
 
 # later, writing to my output CSV
 # recipe['Ingredients'] is a dictionary of ingredients in a single recipe, 
 # and the count of those ingredients used
-for key in INGREDIENTS:
+for key in all_ingredients:
     if key in recipe['Ingredients']:  
         formatted_row[key] = recipe['Ingredients'][key]
     else:
@@ -194,7 +194,7 @@ This may take more lines of code to achieve than with some intricate pandas know
 
 Now that I have an output CSV with some more uniform formatting, I'm ready to import this data to a DataFrame using pandas.
 
-## Hot Encoding
+## One Hot Encoding
 
 I had mentioned earlier that I could use [pandas](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.get_dummies.html) to hot encode some classifying information. When I was first working on formatting my data, I had explored using the `getdummies` method to achieve this, but then on inspecting those results I realized I would have a bunch of columns that look the same except for the number of ingredients in the feature name:
 
@@ -221,7 +221,7 @@ _results_
 
 ![list of columns with weird ingredient names]({{ site.url }}{{ site.baseurl }}/img/source4.png)
 
-Given my low-level knowledge of `get_dummies`, and the intricacy of the work I would need to perform for each item in a string, I decided it'd be better for me to use some old-fashioned script work instead.
+I noticed that my resulting columns would need to be split up another level because my ingredients were currently one large string of comma separated ingredients. Additionally, ingredients that be used in a recipe multiple times were designated in the source data with a `x` and the number of times they could be used. To really classify this information, I would need to create a script to separate the ingredients and handle the `x` scenario in the source information.
 
 That said, for future projects I can see this being a handy method to quickly hot encode your data!
 
@@ -234,14 +234,14 @@ Once I had my finished output CSV, there were a few more columns that had data c
 import pandas
 
 
-TEST = pandas.read_csv('output.csv', delimiter=',')
-TO_SCALE = TEST[['Duration', 'Sell Price', 'Health Effect Details']]
-TO_SCALE -= TO_SCALE.min()
-TO_SCALE /= TO_SCALE.max()
+test_df = pandas.read_csv('output.csv', delimiter=',')
+to_scale_df = test_df[['Duration', 'Sell Price', 'Health Effect Details']]
+to_scale_df -= to_scale_df.min()
+to_scale_df /= to_scale_df.max()
 
 # drop my original columns add my newly scaled columns to my DataFrame FINAL
-TEST = TEST.drop(['Duration', 'Sell Price', 'Health Effect Details'], axis=1)
-FINAL = pandas.concat([TEST, TO_SCALE], axis=1)
+test_df = test_df.drop(['Duration', 'Sell Price', 'Health Effect Details'], axis=1)
+FINAL = pandas.concat([test_df, to_scale_df], axis=1)
 ```
 
 My scaled columns would look something like:
@@ -250,4 +250,4 @@ My scaled columns would look something like:
 
 And that's it! I can separate this data into a training and testing set.
 
-![a gif from zelda daying don't give up]({{ site.url }}{{ site.baseurl }}/img/dont_give_up.gif)
+![a gif from zelda saying don't give up]({{ site.url }}{{ site.baseurl }}/img/dont_give_up.gif)
