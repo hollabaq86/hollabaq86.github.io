@@ -14,3 +14,5 @@
 [Machine Learning Glossary and Resources!](_posts/2018-09-20-Machine-Learning-Glossary-and-Resources.md)
 
 [Formatting Noisy Data for Machine Learning](_posts/2018-10-16-Formatting-Noisy-Data-for-Machine-Learning.md)
+
+[Making a Brand New Site from Scratch: a Checklist](_posts/2019-08-31-Making-A-Brand-New-Site-Checklist.md)
