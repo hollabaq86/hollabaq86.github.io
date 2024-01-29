@@ -2,11 +2,17 @@
 
 ### Check out my current and former projects
 
-- [Boozin' Bitchin' Book Club](http://www.b3cpod.com)
-	A bi-weekly book club podcast where I drink and discuss with my cohosts. Hijinks ensue.	
-- [Haikuna Matata](https://haikuna-matata.herokuapp.com)
+**Braintree Client and Server SDKs**
+At my day job, I'm a Group Tech Lead for [Braintree SDKs]([url](https://github.com/braintree)). This means most of my work is reviewing others' code at this point, but notable historic contributions include implementing support for 3DS v2 in our client SDKs and major version updates to our server SDKs.
+
+#### the graveyard
+
+These sites are no longer on the internet, but the codebases still exist on my github profile:
+- [wildchef](https://github.com/hollabaq86/wildchef)
+  	Where I explore machine learning concepts to analyze possible recipes within the video game Zelda: Breadth of the Wild
+- [Haikuna Matata](https://github.com/hollabaq86/haikuna-matata)
 	A Python-based, haiku generating web applcation that leverages the Python community's NLTK library and machine-learning principles.
-- [Wham Bot](https://twitter.com/12daysofwham)
+- [Wham Bot](https://github.com/hollabaq86/WHAM-bot)
 	Twitter bot using NodeJS with modules for Twitter's REST API and emoji text.
 
 ### Check out my blerrrrrrrg
